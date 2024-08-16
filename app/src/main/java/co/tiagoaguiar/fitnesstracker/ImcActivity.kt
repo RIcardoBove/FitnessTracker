@@ -1,12 +1,14 @@
 package co.tiagoaguiar.fitnesstracker
 
+import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.StringRes
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 
 class ImcActivity : AppCompatActivity() {
@@ -34,9 +36,25 @@ class ImcActivity : AppCompatActivity() {
             Log.d("Teste", "Resultado: $result")
 
             val imcResposeId = imcResponce(result)
-            Toast.makeText(this, imcResposeId, Toast.LENGTH_SHORT).show()
+
+            AlertDialog.Builder(this)
+                .setTitle(getString(R.string.imc_response, result))
+                .setMessage(imcResposeId)
+                .setPositiveButton(android.R.string.ok) { dialogInterface, p1 ->
+
+                }
+                .create()
+                .show()
+
+                //                    object : DialogInterface.OnClickListener {
+//                        override fun onClick(p0: DialogInterface?, p1: Int) {
+//
+//                        }
+
+
         }
     }
+
     //Essa anotação diz para o desenvolvedor que essa funçao não retorna um inteiro
     //qualquer, mas um resource ou R.
     @StringRes
