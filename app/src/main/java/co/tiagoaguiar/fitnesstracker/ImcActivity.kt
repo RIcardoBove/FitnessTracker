@@ -1,9 +1,11 @@
 package co.tiagoaguiar.fitnesstracker
 
 import android.app.Dialog
+import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -50,7 +52,8 @@ class ImcActivity : AppCompatActivity() {
 //                        override fun onClick(p0: DialogInterface?, p1: Int) {
 //
 //                        }
-
+            val service = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            service.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
 
         }
     }
