@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 
 class ImcActivity : AppCompatActivity() {
@@ -21,7 +22,7 @@ class ImcActivity : AppCompatActivity() {
         buttonImcSend = findViewById(R.id.btn_imc_send)
 
         buttonImcSend.setOnClickListener {
-            if (!validate()){
+            if (!validate()) {
                 Toast.makeText(this, R.string.fields_message, Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -31,13 +32,34 @@ class ImcActivity : AppCompatActivity() {
 
             val result = calculateImc(weight, height)
             Log.d("Teste", "Resultado: $result")
+
+            val imcResposeId = imcResponce(result)
+            Toast.makeText(this, imcResposeId, Toast.LENGTH_SHORT).show()
         }
+    }
+    //Essa anotação diz para o desenvolvedor que essa funçao não retorna um inteiro
+    //qualquer, mas um resource ou R.
+    @StringRes
+    private fun imcResponce(imc: Double): Int {
+
+        return when {
+            imc < 15.0 -> R.string.imc_severely_low_weight
+            imc < 16.0 -> R.string.imc_very_low_weight
+            imc < 18.5 -> R.string.imc_low_weight
+            imc < 20.0 -> R.string.normal
+            imc < 30.0 -> R.string.imc_high_weight
+            imc < 35.0 -> R.string.imc_so_high_weight
+            imc < 40.0 -> R.string.imc_severely_high_weight
+            else -> R.string.imc_extreme_weight
+        }
+
     }
 
     private fun calculateImc(weight: Int, height: Int): Double {
         //peso / (altura * altura)
         return weight / ((height / 100.0) * (height / 100.0))
     }
+
     private fun validate(): Boolean {
         return editImcWeight.text.toString().isNotEmpty() &&
                 editImcHeight.text.toString().isNotEmpty() &&
