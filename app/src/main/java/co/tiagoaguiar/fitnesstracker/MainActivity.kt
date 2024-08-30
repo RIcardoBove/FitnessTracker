@@ -6,7 +6,11 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.GridLayout
+import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -30,9 +34,9 @@ class MainActivity : AppCompatActivity() {
         listItem.add(
             MainItem(
                 id = 2,
-                drawableId = R.drawable.ic_launcher_foreground,
+                drawableId = R.drawable.baseline_visibility_24,
                 textStringId = R.string.tmb,
-                color = Color.GREEN
+                color = Color.BLUE
             )
 
         )
@@ -45,7 +49,7 @@ class MainActivity : AppCompatActivity() {
         rvMain = findViewById(R.id.rv_main)
         rvMain.adapter = mainAdapter
 
-        rvMain.layoutManager = LinearLayoutManager(this)
+        rvMain.layoutManager = GridLayoutManager(this, 2)
 
         // Precisamos de uma classe para administrar o recyclerView e suas células (os seus layouts de itens)
         //Adaper ->
@@ -58,7 +62,8 @@ class MainActivity : AppCompatActivity() {
 //        }
     }
 
-    private inner class MainAdapter(private val listItem: MutableList<MainItem>) : RecyclerView.Adapter<MainViewHolder>() {
+    private inner class MainAdapter(private val listItem: MutableList<MainItem>) :
+        RecyclerView.Adapter<MainViewHolder>() {
 
 
         //Qual é o Layout xml da célula especifica (Item)
@@ -70,8 +75,8 @@ class MainActivity : AppCompatActivity() {
 
         // Vai ser disparado toda vez que houver uma rolagem da lista na tela, sendo necessário trocar o conteúdo
         override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
-             val itemCurrent = listItem[position]
-             holder.bind(itemCurrent)
+            val itemCurrent = listItem[position]
+            holder.bind(itemCurrent)
         }
 
 
@@ -85,9 +90,13 @@ class MainActivity : AppCompatActivity() {
     //está classe e a referência do xml em si
     private class MainViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(item: MainItem) {
-           val buttonTest: Button = itemView.findViewById(R.id.btn_item)
-           buttonTest.setText(item.textStringId)
+            val img: ImageView = itemView.findViewById(R.id.item_img_icon)
+            val name: TextView = itemView.findViewById(R.id.item_txt_name)
+            val container: LinearLayout = itemView.findViewById(R.id.item_container_imc)
 
+            img.setImageResource(item.drawableId)
+            name.setText(item.textStringId)
+            container.setBackgroundColor(item.color)
         }
 
     }
