@@ -1,5 +1,7 @@
 package co.tiagoaguiar.fitnesstracker
 
+import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -17,10 +19,10 @@ import androidx.recyclerview.widget.RecyclerView
 class MainActivity : AppCompatActivity() {
     private lateinit var rvMain: RecyclerView
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
 
         val listItem = mutableListOf<MainItem>()
         listItem.add(
@@ -45,7 +47,28 @@ class MainActivity : AppCompatActivity() {
         // 1- o layout xml
         // 2- Aonde a recyclerView vai aparecer ( A tela main )
         // 3- Lógica - conectar o xml da celeula dentro da lista (Recycler) + qtd Elementos
-        val mainAdapter = MainAdapter(listItem)
+//        val mainAdapter = MainAdapter(listItem, object: OnItemClickListener {
+//            override fun onClick(id: Int) {
+//                when (id) {
+//                    1 ->  startActivity(Intent(this@MainActivity, ImcActivity::class.java))
+//
+//                    2 -> {
+//
+//                    }
+//                }
+//            }
+//
+//        })
+
+        val mainAdapter = MainAdapter(listItem) { id ->
+            when (id) {
+                1 -> startActivity(Intent(this@MainActivity, ImcActivity::class.java))
+
+                2 -> {
+
+                }
+            }
+        }
         rvMain = findViewById(R.id.rv_main)
         rvMain.adapter = mainAdapter
 
@@ -62,33 +85,37 @@ class MainActivity : AppCompatActivity() {
 //        }
     }
 
-    private inner class MainAdapter(private val listItem: MutableList<MainItem>) :
-        RecyclerView.Adapter<MainViewHolder>() {
 
 
-        //Qual é o Layout xml da célula especifica (Item)
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
-            val view = layoutInflater.inflate(R.layout.main_item, parent, false)
-            return MainViewHolder(view)
-        }
-
-        // Vai ser disparado toda vez que houver uma rolagem da lista na tela, sendo necessário trocar o conteúdo
-        override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
-            val itemCurrent = listItem[position]
-            holder.bind(itemCurrent)
-        }
+private inner class MainAdapter(
+    private val listItem: MutableList<MainItem>,
+    private val onItemClickListener: (Int) -> Unit
+//    private val onItemClickListener: OnItemClickListener
+) :
+    RecyclerView.Adapter<MainAdapter.MainViewHolder>() {
 
 
-        // Informa quantas células essa Listagem terá.
-        override fun getItemCount(): Int {
-            return listItem.size
-        }
+    //Qual é o Layout xml da célula especifica (Item)
 
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
+        val view = layoutInflater.inflate(R.layout.main_item, parent, false)
+        return MainViewHolder(view)
+    }
+
+    // Vai ser disparado toda vez que houver uma rolagem da lista na tela, sendo necessário trocar o conteúdo
+    override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
+        val itemCurrent = listItem[position]
+        holder.bind(itemCurrent)
+    }
+
+
+    // Informa quantas células essa Listagem terá.
+    override fun getItemCount(): Int {
+        return listItem.size
     }
 
     //está classe e a referência do xml em si
-    private class MainViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    private inner class MainViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(item: MainItem) {
             val img: ImageView = itemView.findViewById(R.id.item_img_icon)
             val name: TextView = itemView.findViewById(R.id.item_txt_name)
@@ -97,7 +124,22 @@ class MainActivity : AppCompatActivity() {
             img.setImageResource(item.drawableId)
             name.setText(item.textStringId)
             container.setBackgroundColor(item.color)
+
+            container.setOnClickListener {
+                // Aqui ele é uma ref.  função
+                onItemClickListener.invoke(item.id)
+                // é uma ref. interface
+                //onItemClickListener.onClick(id: Int)
+            }
         }
 
     }
+
+}
+
+
+// 3 maneiras de escutar eventos de click usando celulas com a atividades
+// 1. implementanso uma interface
+// 2. utilizando objetos anonimos
+// 3. funcional
 }
