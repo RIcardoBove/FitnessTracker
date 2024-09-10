@@ -45,10 +45,13 @@ class ImcActivity : AppCompatActivity() {
                 .setPositiveButton(android.R.string.ok) { dialogInterface, p1 ->
 
                 }
+                .setNegativeButton(R.string.save) { dialogInterface, p1 ->
+
+                }
                 .create()
                 .show()
 
-                //                    object : DialogInterface.OnClickListener {
+            //                    object : DialogInterface.OnClickListener {
 //                        override fun onClick(p0: DialogInterface?, p1: Int) {
 //
 //                        }
