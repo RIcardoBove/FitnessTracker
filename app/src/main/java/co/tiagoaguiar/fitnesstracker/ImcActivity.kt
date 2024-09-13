@@ -1,8 +1,7 @@
 package co.tiagoaguiar.fitnesstracker
 
-import android.app.Dialog
 import android.content.Context
-import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
@@ -12,6 +11,8 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import co.tiagoaguiar.fitnesstracker.model.App
+import co.tiagoaguiar.fitnesstracker.model.Calc
 
 class ImcActivity : AppCompatActivity() {
     private lateinit var editImcWeight: EditText
@@ -46,7 +47,16 @@ class ImcActivity : AppCompatActivity() {
 
                 }
                 .setNegativeButton(R.string.save) { dialogInterface, p1 ->
+                    Thread {
+                        val app = application as App
+                        val dao = app.db.calcDao()
+                        dao.insert(Calc(type = "Imc", res = result))
 
+                        runOnUiThread {
+                            startActivity(Intent(this@ImcActivity, ListCalcActivity::class.java))
+                        }
+
+                    }.start()
                 }
                 .create()
                 .show()
