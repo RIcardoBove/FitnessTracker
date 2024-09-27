@@ -18,6 +18,7 @@ class ImcActivity : AppCompatActivity() {
     private lateinit var editImcWeight: EditText
     private lateinit var editImcHeight: EditText
     private lateinit var buttonImcSend: Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_imc)
@@ -27,6 +28,7 @@ class ImcActivity : AppCompatActivity() {
         buttonImcSend = findViewById(R.id.btn_imc_send)
 
         buttonImcSend.setOnClickListener {
+
             if (!validate()) {
                 Toast.makeText(this, R.string.fields_message, Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
@@ -34,10 +36,7 @@ class ImcActivity : AppCompatActivity() {
 
             val weight = editImcWeight.text.toString().toInt()
             val height = editImcHeight.text.toString().toInt()
-
             val result = calculateImc(weight, height)
-            Log.d("Teste", "Resultado: $result")
-
             val imcResposeId = imcResponce(result)
 
             AlertDialog.Builder(this)
@@ -50,10 +49,12 @@ class ImcActivity : AppCompatActivity() {
                     Thread {
                         val app = application as App
                         val dao = app.db.calcDao()
-                        dao.insert(Calc(type = "Imc", res = result))
+                        dao.insert(Calc(type = "imc", res = result))
 
                         runOnUiThread {
-                            startActivity(Intent(this@ImcActivity, ListCalcActivity::class.java))
+                            val intent = Intent(this@ImcActivity, ListCalcActivity::class.java)
+                            intent.putExtra("type", "imc")
+                            startActivity(intent)
                         }
 
                     }.start()
