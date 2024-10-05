@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
@@ -52,9 +54,7 @@ class ImcActivity : AppCompatActivity() {
                         dao.insert(Calc(type = "imc", res = result))
 
                         runOnUiThread {
-                            val intent = Intent(this@ImcActivity, ListCalcActivity::class.java)
-                            intent.putExtra("type", "imc")
-                            startActivity(intent)
+                            openListCalcActivity()
                         }
 
                     }.start()
@@ -70,6 +70,26 @@ class ImcActivity : AppCompatActivity() {
             service.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
 
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.menu_search) {
+            openListCalcActivity()
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun openListCalcActivity() {
+
+        val intent = Intent(this@ImcActivity, ListCalcActivity::class.java)
+        intent.putExtra("type", "imc")
+        startActivity(intent)
     }
 
     //Essa anotação diz para o desenvolvedor que essa funçao não retorna um inteiro

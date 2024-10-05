@@ -10,13 +10,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import co.tiagoaguiar.fitnesstracker.model.App
 import co.tiagoaguiar.fitnesstracker.model.Calc
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class ListCalcActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list_calc)
 
-        lateinit var response: List<Calc?>
+        var listCalc = mutableListOf<Calc>()
 
         val rvListCal: RecyclerView = findViewById(R.id.rv_list_calc)
         rvListCal.layoutManager = LinearLayoutManager(this)
@@ -27,11 +29,13 @@ class ListCalcActivity : AppCompatActivity() {
         Thread {
             val app = application as App
             val dao = app.db.calcDao()
-            response = dao.getRegisterByType(type)
+            val response = dao.getRegisterByType(type)
 
             runOnUiThread {
                 val adapter = ListCalcAdapter(response)
                 rvListCal.adapter = adapter
+                listCalc.addAll(response)
+                adapter.notifyDataSetChanged()
             }
 
         }.start()
@@ -60,7 +64,11 @@ class ListCalcActivity : AppCompatActivity() {
         fun bind(item: Calc) {
             val textCalc = itemView.findViewById<TextView>(R.id.res_imc)
 
-            textCalc.setText("IMC: ${item.res.toString()}")
+            val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale("pt", "BR"))
+            val data = sdf.format(item.createdDate)
+            val res = item.res
+
+            textCalc.text = getString(R.string.list_response, res, data)
 
         }
 
