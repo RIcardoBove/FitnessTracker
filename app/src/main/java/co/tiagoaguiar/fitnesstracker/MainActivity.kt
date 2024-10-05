@@ -15,6 +15,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import co.tiagoaguiar.fitnesstracker.model.TbmActivity
 
 class MainActivity : AppCompatActivity() {
     private lateinit var rvMain: RecyclerView
@@ -64,11 +65,13 @@ class MainActivity : AppCompatActivity() {
             when (id) {
                 1 -> startActivity(Intent(this@MainActivity, ImcActivity::class.java))
 
-                2 -> {
+
+                2 -> startActivity(Intent(this@MainActivity, TbmActivity::class.java))
 
                 }
             }
         }
+
         rvMain = findViewById(R.id.rv_main)
         rvMain.adapter = mainAdapter
 

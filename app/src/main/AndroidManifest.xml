@@ -11,8 +11,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FitnessTracker">
         <activity
-            android:name=".ListCalcActivity"
+            android:name=".model.TbmActivity"
             android:exported="false" />
+        <activity
+            android:name=".ListCalcActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".ImcActivity"
             android:exported="false" />
