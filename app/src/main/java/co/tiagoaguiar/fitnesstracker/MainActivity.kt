@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity() {
 
                 }
             }
-        }
+
 
         rvMain = findViewById(R.id.rv_main)
         rvMain.adapter = mainAdapter
